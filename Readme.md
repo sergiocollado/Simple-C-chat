@@ -1,4 +1,6 @@
-reference: http://www.csc.villanova.edu/~mprobson/courses/sp21-csc2405/chat.html Chat Client and Multi-Threaded Chat Server
+# Chat Client and Multi-Threaded Chat Server
+
+reference: http://www.csc.villanova.edu/~mprobson/courses/sp21-csc2405/chat.html  
 
 ## Introduction
 
@@ -46,20 +48,20 @@ Extend the code in the chat client and server template to implement a chat appli
 Specifically, the client and server should implement the following communication protocol (the client reads in commands from the user and forwards them to the server):
 
 
-### JOIN name (Example: JOIN Melissa)
+#### JOIN name (Example: JOIN Melissa)
 The chat client forwards the request to join to the server. When the server receives this request from the client, it adds that client to a list of clients involved in the chat session.
 
 
-### LEAVE
+#### LEAVE
 The chat client forwards the request to leave to the server. When the server receives the request to leave the chat session from the client, it removes that client from its list of clients involved in the chat session.
 The client should not be able to invoke the LEAVE command before joining the chat session.
 
 
-### WHO
+#### WHO
 The chat client forwards this request to the server. The server responds back with a list of names of those who have joined the chat session, one per line. Once the client receives this list, it displays it on the screen.
 
 
-### HELP
+#### HELP
 The client prints out a list of available commands.
 
 
@@ -84,8 +86,10 @@ Work incrementally, one step at a time, one command at a time. Make sure to thor
 
 5. The function HandleJOIN handles the JOIN request (already implemented). Take some time to understand what this function does. It takes as arguments the name of the chat client (extracted from the client message) and the index of the entry in the array clients allocated for this client. The function stores the name of the chat client into the array and sends a welcome message to the new chat client. It also checks to make sure that the client hasn't already joined the chat room.
 
-6. At this point you should be able to test the code for your server and client(s). Compile the code and remove all errors. In a terminal window invoke the server with your chosen port number as a command line argument. In a separate terminal window invoke the client with host name localhost and the same port number as command line arguments. If the user types in something like
-   JOIN Bob
+6. At this point you should be able to test the code for your server and client(s). Compile the code and remove all errors. In a terminal window invoke the server with your chosen port number as a command line argument. In a separate terminal window invoke the client with host name localhost and the same port number as command line arguments. If the user types in something like: <br>  
+``` 
+   JOIN Bob 
+```
 in the client window, it should receive the message "Welcome to the chat room, Bob!" from the server.
 
 7. Make sure that the JOIN command works as expected, then proceed to implementing HandleWHO. This function simply scans the array of clients, and if the entry is valid (i.e, the name field is not NULL), it simply sends to the client the name stored in that array entry, followed by "\n" (so that each name appears on a separate line). Make sure you test the function thoroughly (with multiple clients running in separate terminal windows) before moving on.

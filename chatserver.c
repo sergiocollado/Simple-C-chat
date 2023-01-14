@@ -71,11 +71,11 @@ int main(int argc, char** argv) {
   struct sockaddr clientaddr;
   int clientlen = sizeof(struct sockaddr);	
   int connfd; // connfd: connection file descriptor
-  int tid;
+  int tid;    // thread id
 
   if (argc != 2) {
       fprintf(stderr, "usage: %s <port>\n", argv[0]);
-      // argv[0] is the name of the program by convetion
+      // argv[0] is the name of the program by convention
       exit(EXIT_FAILURE);
   }
 
@@ -113,7 +113,7 @@ int main(int argc, char** argv) {
 
       // Allocate a new entry in the array of clients for the new client
       // create a new thread to handle the client
-      // 'clients' may be modified by other threads, protect with semaphore
+      // 'clients' may be modified by other threads, so it has to be protected with a semaphore
 
       sem_wait(&mutex);
       fprintf(stdout, "accepted new connection\n");
@@ -130,7 +130,7 @@ int main(int argc, char** argv) {
                break;
           }
       }
-      printf("thread launched\n");  // todo: clean
+      printf("thread launched with id: %d\n", tid);  // TODO: clean?
       sem_post(&mutex);
 
   } // end while(1)

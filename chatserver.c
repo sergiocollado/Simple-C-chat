@@ -4,7 +4,7 @@
  *     JOIN name
  *     WHO
  *     LEAVE
- *     
+ *
  *     reference: http://www.csc.villanova.edu/~mdamian/classes/csc2405sp18/sockets/chat
  */
 
@@ -19,7 +19,7 @@
 #define MAX_CLIENTS (20)
 #define MAX_NAME_LENGTH (20)
 #define DEBUG_ON (1)
-#define DEBUG if(DEBUG_ON) 
+#define DEBUG if(DEBUG_ON)
 #define MAX_MESSAGE_SIZE (512)
 #define MAX_HOSTNAME_SIZE (50)
 #define VERSION "Chat Server v0.1\n"
@@ -37,7 +37,7 @@ sem_t mutex; // semaphore to protect critical sections
 // prototypes:
 
 // thread function
-void* HandleClient(void* arg); 
+void* HandleClient(void* arg);
 
 // add client name in position index in the array 'clients'
 void HandleJOIN(char* buf, int index);
@@ -69,7 +69,7 @@ bool checkVERSION(char* message);
 int main(int argc, char** argv) {
   int listenfd, port;
   struct sockaddr clientaddr;
-  int clientlen = sizeof(struct sockaddr);	
+  int clientlen = sizeof(struct sockaddr);
   int connfd; // connfd: connection file descriptor
   int tid;    // thread id
 
@@ -92,7 +92,7 @@ int main(int argc, char** argv) {
 
   printf("%s\n", VERSION);
 
-  // initialize semaphore to protect critical sections 
+  // initialize semaphore to protect critical sections.
   sem_init(&mutex, 0, 1);
 
   // create a listening socket
@@ -135,10 +135,10 @@ int main(int argc, char** argv) {
 
   } // end while(1)
 
-  return EXIT_SUCCESS; 
+  return EXIT_SUCCESS;
 }
 
-/* 
+/*
 * HandleClient - handle chat client
 * arg is the client index in the client's array
 */
@@ -158,11 +158,11 @@ void* HandleClient(void* arg)
 	  // broadcast anything else
 
 	  // TODO: add your code here
-	  
+
 	  // read the next line from the client
 	  n = readline(connfd, buf, MAXLINE);
 
-	  fprintf(stdout, "[%s] %s\n",(clients[index].name? clients[index].name : "?"), buf); 
+	  fprintf(stdout, "[%s] %s\n",(clients[index].name? clients[index].name : "?"), buf);
 
 	  if (clients[index].name == NULL) {
 	      if (checkJOIN(buf)) {
@@ -181,7 +181,7 @@ void* HandleClient(void* arg)
 
   // close connection with the client
   close(connfd);
-  return NULL; 
+  return NULL;
 }
 
 /* HandleWHO: send out client names in response to the WHO command
@@ -190,12 +190,12 @@ void HandleWHO(int fd)
 {
   // TODO: add your code here
   for (int i = 0; i < MAX_CLIENTS; i++)  {
-      
-      if ((clients[i].name == NULL) || (clients[i].fd == -1)) 
+
+      if ((clients[i].name == NULL) || (clients[i].fd == -1))
           continue;
 
       errno = 0;
-      ssize_t message_length = 0; 
+      ssize_t message_length = 0;
 
       message_length = write(fd, clients[i].name, (strlen(clients[i].name /*+ 1*/)));
       write(fd, "\n", sizeof(char));
@@ -211,7 +211,7 @@ void HandleWHO(int fd)
       }
   }
   printf("\n");
-} 
+}
 
 /*
 * HandleBroadcast: Broadcast msg from client in position index
@@ -222,7 +222,7 @@ void HandleBroadcast(char* msg, int index)
     // TODO: add your code here
     if (index >= MAX_CLIENTS)
 	return;
-    
+
     if (clients[index].name == NULL)  // TODO: check this in a better place!
         return;
 
@@ -230,17 +230,17 @@ void HandleBroadcast(char* msg, int index)
 	return;
 
     char message[MAX_MESSAGE_SIZE];
-    memset(message,0x00,sizeof(char)*MAX_MESSAGE_SIZE); 
+    memset(message,0x00,sizeof(char)*MAX_MESSAGE_SIZE);
 
     for (int i = 0; i < MAX_CLIENTS; i++) // go through all the clients
     {
-        if ((i != index) && (clients[i].name != NULL) && (clients[i].fd != -1)) { 
+        if ((i != index) && (clients[i].name != NULL) && (clients[i].fd != -1)) {
             errno = 0;
-            ssize_t message_lenght = 0; 
-    
-            memset(message, 0x00, sizeof(char)*MAX_MESSAGE_SIZE); 
+            ssize_t message_lenght = 0;
+
+            memset(message, 0x00, sizeof(char)*MAX_MESSAGE_SIZE);
 	    strcat(message, "[");
-	    strcat(message, clients[index].name); 
+	    strcat(message, clients[index].name);
 	    strcat(message, "] ");
 	    strcat(message, msg);
 
@@ -280,32 +280,32 @@ void HandleJOIN(char* buf, int index)
     while((*p_name == ' ') || (*p_name == '\t')) { p_name++; }
 
     // TODO: check the max lenght of the name
-   
+
     // replace '\n' by '\0' in user name if any
     if ('\n' == p_name[strlen(p_name)-1]) {
-        p_name[strlen(p_name)-1] = '\0'; 
+        p_name[strlen(p_name)-1] = '\0';
     }
 
     sem_wait(&mutex); // we have to block here, in case several clients want to subscribe at the same time
 
     clients[index].name = malloc(strlen(p_name)+1); // +1 to account for '\0'
     strcpy(clients[index].name, p_name); // is better to use, strncpy. it is safer. It could be possible to also use strdup().
-    
+
     sem_post(&mutex); // release the lock
 
     for (int i = 0; i < MAX_CLIENTS; i++)
     {
         if (clients[i].name == NULL) { continue; }
 	if (i == index) {
-	    sprintf(output, "Welcome to the chat room, %s!\n", p_name); 
-	    fprintf(stdout, "Welcome to the chat room, %s!\n\n", p_name); 
+	    sprintf(output, "Welcome to the chat room, %s!\n", p_name);
+	    fprintf(stdout, "Welcome to the chat room, %s!\n\n", p_name);
 	} else {
 	    sprintf(output, "%s has joined the chat room\n", p_name);
 	    //fprintf(stdout, "%s has joined the chat room\n", p_name);
        	}
 
         ssize_t rv = send(clients[i].fd, output, strlen(output), 0);
-	if (rv == -1) 
+	if (rv == -1)
             printf("Error when sending a message to the client\n");
     }
 }

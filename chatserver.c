@@ -135,6 +135,9 @@ int main(int argc, char** argv) {
 
   } // end while(1)
 
+  //TODO: it would be nice to add a routine that every now and then removes
+  //the connections that have not JOIN to the chat
+
   return EXIT_SUCCESS;
 }
 
@@ -254,6 +257,9 @@ void HandleBroadcast(char* msg, int index)
 	    }
         }
     }
+
+    //TODO: here it would be a good place in case we want record the chat
+    //in a database such redis
 }
 
 /* HandleJOIN: Add client name in position index in the

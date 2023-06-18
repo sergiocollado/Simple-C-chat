@@ -1,4 +1,4 @@
-/* chatclient.c - a simple chat client
+/* chatclient.c - A simple C chat client
  * communication protocol:
  *   JOIN name
  *   WHO
@@ -10,7 +10,7 @@
 /* JOIN name
  * The chat forwards the request to join the server.
  * When the server receives this request from the client
- * it adds that client to a list of clients involved in 
+ * it adds that client to a list of clients involved in
  * that chat session
  */
 
@@ -19,14 +19,15 @@
  * When the server receives the request to leave the chat
  * session from the client, it removes that client form its list
  * of clients involved in the chat session.
- * The client should not be able to invoque LEAVE command 
+ * The client should not be able to invoque LEAVE command
  * before joining the chat session
  */
 
 /* WHO
- * The chat client forwards this request to the server. 
+ * The chat client forwards this request to the server.
  * The server responds back with a list of names of those
- * who have joined the chat session, one per line.  * Once the client reveives this list, it displays it * on the screen.
+ * who have joined the chat session, one per line.
+ * * Once the client reveives this list, it displays it * on the screen.
  */
 
 /* HELP
@@ -36,7 +37,7 @@
 /* All the messages sen by the client and reveived by
  * the server are then redistributed to all clients
  * involved in teh current session
- * 
+ *
  * When displayed the message is of the form: Name: Message
  */
 
@@ -74,7 +75,7 @@ int main(int argc, char* argv[])
     char* host, buff[MAXLINE];
 
     if (argc != 3) {
-        fprintf(stderr, "usage: %s <host> <port>\n", argv[0]);	
+        fprintf(stderr, "usage: %s <host> <port>\n", argv[0]);
         // argv[0] is the name of the program by convention
         exit(EXIT_FAILURE);
     }
@@ -98,7 +99,6 @@ int main(int argc, char* argv[])
    } else {
        printf("Connection to the server opened...\n");
    }
-    
 
    // TODO: create a thread to read messages from the server
    // and print them on the screen
@@ -107,12 +107,12 @@ int main(int argc, char* argv[])
 
    // TODO: In a loop, read string from user and send them to
    // the server & terminate when the user writes LEAVE
-   
+
    readTextAndSendToServerLoop(clientfd);
 
    // close sockets
    close(clientfd);
-   return(EXIT_SUCCESS); 
+   return(EXIT_SUCCESS);
 }
 
 void printCommands(void) {
@@ -165,19 +165,19 @@ void* HandleFeedback(int fileDescriptor)
 {
     // Since the chat client and the chat server operate asynchronously
     // (the server can send messages to the client at any time), the
-    // client needs to spawn a thread to handle messages received 
+    // client needs to spawn a thread to handle messages received.
     // from the server.
     //
     // Implement the HandleFeedback tread function that reads messages
-    // from the server and prints them onto the screen. The function 
-    // loops indefinitely, until EOF (end-of-file) is received (in 
-    // response of the server closing the connection to the client 
-    // for whatever reason).  
+    // from the server and prints them onto the screen. The function
+    // loops indefinitely, until EOF (end-of-file) is received (in
+    // response of the server closing the connection to the client
+    // for whatever reason).
     //
     // exit when the connection is terminated
 
     // TODO: add code here
-    
+
     if (fileDescriptor == NULL) {
 	printf("Error fileDescriptor for the server is NULL!!\n");
 	exit(EXIT_FAILURE);
@@ -206,9 +206,9 @@ size_t readInput(char* buf, int buf_size) {
     /*
     gets() is dangerous because it is possible for the user to crash
     the program by typing too much into the prompt. It can't detect the
-    end of available memory, so if you allocate an amount of memory 
+    end of available memory, so if you allocate an amount of memory
     too small for the purpose, it can cause a seg fault and crash.
-    ... so we use fgets() because allows you to specify how many characters 
+    ... so we use fgets() because allows you to specify how many characters
     are taken out of the standard input buffer, so they don't overrun the variable.
     */
 
@@ -218,12 +218,12 @@ size_t readInput(char* buf, int buf_size) {
     // For `feof()` and `ferror()`, see:
     // 1. https://en.cppreference.com/w/c/io/feof
     // 1. https://en.cppreference.com/w/c/io/ferror
-    
-    errno = 0; 
+
+    errno = 0;
     char* retval = fgets(buf, buf_size, stdin);
-    /* fgets() reads in at most one less than size characters from stream and 
-     * stores them into the buffer pointed to by s.  Reading stops after an EOF 
-     * or a newline.  If a newline is read, it is stored into the buffer. A 
+    /* fgets() reads in at most one less than size characters from stream and
+     * stores them into the buffer pointed to by s.  Reading stops after an EOF
+     * or a newline.  If a newline is read, it is stored into the buffer. A
      * terminating null byte ('\0') is stored after the last character in the buffer. */
 
     if (feof(stdin))
@@ -261,7 +261,7 @@ size_t readInput(char* buf, int buf_size) {
 void readTextAndSendToServerLoop(int clientfd) {
     char message[MAX_MESSAGE_SIZE];
     size_t message_length = 0;
-    
+
     //memset(message,0x00,sizeof(char)*MAX_MESSAGE_SIZE);
 
     // get string from the user
@@ -279,17 +279,17 @@ void readTextAndSendToServerLoop(int clientfd) {
 
        // send string to the server
        send(clientfd, message, message_length, 0);
-       
+
        // get string from the user
        message_length = readInput(message, MAX_MESSAGE_SIZE-1);
        message[message_length+1] = '\0'; // end of string
        printf("\n");
     }
-    
-    // TODO send LEAVE command  message to server 
+
+    // TODO send LEAVE command  message to server
     send(clientfd, "LEAVE\n", strlen("LEAVE\n"), 0);
 
-    // TODO kill the reading server thread! 
+    // TODO kill the reading server thread!
     // the thead is detached, so it will delete itself when finishing the program.
 }
 

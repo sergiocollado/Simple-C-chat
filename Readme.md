@@ -75,7 +75,7 @@ Work incrementally, one step at a time, one command at a time. Make sure to thor
   - Since the chat client and the chat server operate asynchronously (the server can send messages to the client at any time), the client needs to spawn a thread to handle all messages received from the server.
   - Implement the HandleFeedback thread function that reads messages from the server and prints them onto the screen. The function loops indefinitely, until EOF is received (in response to the server closing the connection to the client for whatever reason).
   - Compile your code and remove all errors
-  
+
 2. The chatserver.c program uses an array clients that stores information abotu the chat clients (name and connection file descriptor). Add code to the main function to allocate a new entry in this array each time a new connection request is received from a client. Make sure you protect critical sections with semaphores.
 
 3. The chat server is multi-threaded: each time a new connection request is received from a chat client, the server creates a thread to handle the new chat client. The thread should begin executing the HandleClient code.

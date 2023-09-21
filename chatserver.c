@@ -323,18 +323,18 @@ void HandleLEAVE(int index)
 {
     if (index >= MAX_CLIENTS)
 	return;
-    
-    if (clients[index].name == NULL) 
+
+    if (clients[index].name == NULL)
         return;
-    
-    // prepare the message that someone leaves the chat.   
+
+    // prepare the message that someone leaves the chat.
     char buf[MAXLINE];
     sprintf(buf, "%s just leaved the chat room\n", clients[index].name);
 
-    // broadcast that someone leaves the chat.   
+    // broadcast that someone leaves the chat.
     HandleBroadcast(buf, index);
 
-    sem_wait(&mutex); 
+    sem_wait(&mutex);
     if (clients[index].name != NULL) {
 	printf("%s just leaved the chat room.\n\n", clients[index].name);
         free(clients[index].name);  // free memory
@@ -364,7 +364,7 @@ static char* removeLeadingSpaces(char* message) {
 
 static bool checkCommand(const char* command, char* message) {
     if (*command == NULL) return false;
-    if (*message == NULL) return false; 
+    if (*message == NULL) return false;
 
     if (0 == strncmp(message, command, strlen(command)) ) {
 	return true;

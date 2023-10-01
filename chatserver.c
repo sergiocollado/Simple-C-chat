@@ -340,7 +340,7 @@ void HandleLEAVE(int index)
         free(clients[index].name);  // free memory
        	clients[index].name = NULL; // clean up the name
     }
-    close(clients[index].fd);
+    close(clients[index].fd);       // close the socket
     clients[index].fd = -1;         // clean up the file descriptor
     sem_post(&mutex);
 

@@ -280,6 +280,8 @@ void readTextAndSendToServerLoop(int clientfd) {
        // send string to the server
        send(clientfd, message, message_length, 0);
 
+       //memset(message,0x00,sizeof(char)*MAX_MESSAGE_SIZE);
+
        // get string from the user
        message_length = readInput(message, MAX_MESSAGE_SIZE-1);
        message[message_length+1] = '\0'; // end of string

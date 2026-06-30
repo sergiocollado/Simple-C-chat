@@ -324,7 +324,7 @@ void HandleLEAVE(int index)
     if (index >= MAX_CLIENTS)
 	return;
 
-    if (clients[index].name == NULL)
+    if (clients[index].name == NULL) // TODO. review: is this ok? because if you connected, but didn't join, you are actually using a position in the cliens array, maybe what you have to check if is the fd is defined or not
         return;
 
     // prepare the message that someone leaves the chat.

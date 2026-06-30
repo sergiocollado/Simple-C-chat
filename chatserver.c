@@ -387,3 +387,5 @@ bool checkLEAVE(char* message) {
 bool checkVERSION(char* message) {
     return checkCommand("VERSION", message);
 }
+
+// TODO: you may want the HandleHELP command here, because if you add new commands, you can just implement them in the server and don't have really to change the client

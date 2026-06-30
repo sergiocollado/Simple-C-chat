@@ -114,6 +114,7 @@ int main(int argc, char** argv) {
       // Allocate a new entry in the array of clients for the new client
       // create a new thread to handle the client
       // 'clients' may be modified by other threads, so it has to be protected with a semaphore
+	  // This threaded design actually is lacking against the C10K problem (https://www.youtube.com/watch?v=L0jMBrCEQNQ)
 
       sem_wait(&mutex);
       fprintf(stdout, "accepted new connection\n");

@@ -33,6 +33,7 @@ typedef struct
 client_info clients[MAX_CLIENTS]; // slot i is empty, is clients[i]= NULL
 sem_t mutex; // semaphore to protect critical sections
 
+// TODO, the array of clients, is fine, but it is basic, maybe a C hash map could be implemented
 
 // prototypes:
 

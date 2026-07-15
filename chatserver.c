@@ -33,7 +33,8 @@ typedef struct
 client_info clients[MAX_CLIENTS]; // slot i is empty, is clients[i]= NULL
 sem_t mutex; // semaphore to protect critical sections
 
-// TODO, the array of clients, is fine, but it is basic, maybe a C hash map could be implemented
+// TODO: the array of clients, is fine, but it is basic, maybe a C hash map could be implemented
+// TODO: add the command for 'direct message' and 'send file' 
 
 // prototypes:
 
@@ -150,7 +151,7 @@ int main(int argc, char** argv) {
 void* HandleClient(void* arg)
 {
   size_t n = 1;
-  char buf[MAXLINE];
+  char buf[MAXLINE];  // TODO: maybe a better name for this variable would be 'message' or 'input_message'.
 
   int index = (int)arg;
   int connfd = clients[index].fd;
@@ -169,6 +170,7 @@ void* HandleClient(void* arg)
 
 	  fprintf(stdout, "[%s] %s\n",(clients[index].name? clients[index].name : "?"), buf);
 
+	  // TODO: if this if-esle-if clause would be a function, it would be easier to test
 	  if (clients[index].name == NULL) {
 	      if (checkJOIN(buf)) {
 		  HandleJOIN(buf, index);

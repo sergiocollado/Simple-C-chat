@@ -1,5 +1,7 @@
 reference: http://www.csc.villanova.edu/~mprobson/courses/sp21-csc2405/chat.html Chat Client and Multi-Threaded Chat Server
 
+![chat demo](https://github.com/sergiocollado/Simple-C-chat/blob/main/Simple_C_chat_example.gif)
+
 ## Introduction
 
 The goal of this activity is to implement a simplified chat server that can support multiple clients over the Internet. There are a seemingly infinite number of chat programs out there using various protocols, with IRC (Internet Relay Chat) being one of the earliest and most popular chat protocols. We will implement a very simplified version of IRC.
